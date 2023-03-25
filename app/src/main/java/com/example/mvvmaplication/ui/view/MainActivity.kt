@@ -1,10 +1,12 @@
-package com.example.mvvmaplication.view
+package com.example.mvvmaplication.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.mvvmaplication.databinding.ActivityMainBinding
-import com.example.mvvmaplication.viewmodel.MainActivityViewModel
+import com.example.mvvmaplication.ui.viewmodel.MainActivityViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -17,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = MainActivityViewModel()
 
-        initUI()
+        viewModel.onCreate()
         
         binding.viewContainer.setOnClickListener {
             viewModel.randomQuote()
@@ -27,9 +29,11 @@ class MainActivity : AppCompatActivity() {
             binding.tvAuthor.text = it.author
             binding.tvQuote.text = it.quote
         })
+
+        viewModel.isLoading.observe(this, Observer {
+            binding.progress.isVisible = it
+        })
+
     }
 
-    private fun initUI() {
-        viewModel.randomQuote();
-    }
 }
